@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# paths
+VENV_PATH="./venv"
+PIP_PATH="$VENV_PATH/bin/pip"
+REQUIREMENTS_PATH="./requirements.txt"
+
+# colors
+VENV_COLOR='\033[0;36m'
+PACKAGES_COLOR='\033[1;33m'
+DONE_COLOR='\033[0;32m'
+
+RESET_COLOR='\033[0m'
+
+# create venv and install dependencies if venv doesn't exist
+if [ ! -d "$VENV_PATH" ]; then
+    # create venv
+    echo -e "${VENV_COLOR}Setting up venv...${RESET_COLOR}"
+    python3 -m venv $VENV_PATH
+    echo -e "${VENV_COLOR}Created venv!${RESET_COLOR}"
+
+    # install packages
+    echo -e "${PACKAGES_COLOR}Installing packages...${RESET_COLOR}"
+    "$PIP_PATH" install -r "$REQUIREMENTS_PATH"
+    
+    # done
+    echo -e "\n${DONE_COLOR}  ==> Done!${RESET_COLOR}\n" 
+fi
+
+# run script
+"$VENV_PATH/bin/python" apply.py
+
+# await keypress
+read -p "Press any key to close this window..."

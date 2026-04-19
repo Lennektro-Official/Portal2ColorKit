@@ -1,0 +1,36 @@
+PortalRefract
+{
+    $Stage 2
+    $PortalOpenAmount "0.0"
+    $PortalStatic "0.0"
+    $PortalMaskTexture "models/portals/noise-blur-256x256"
+    $PortalColorGradientDark "[0.0 0.0 0.0]"
+    $PortalColorGradientLight "[0.3 0.3 0.3]"
+    $PortalColorScale "1.0"
+    $PortalCoopColorPlayerOnePortalOne "--AtlasPrimary--"
+    $PortalCoopColorPlayerOnePortalTwo "--AtlasSecondary--"
+    $PortalCoopColorPlayerTwoPortalOne "--PBodyPrimary--"
+    $PortalCoopColorPlayerTwoPortalTwo "--PBodySecondary--"
+    "<DX90"
+    {
+        $PortalMaskTexture "models/portals/portal-mask-dx8"
+        $PortalColorTexture "models/portals/portal-blue-color-dx8"
+        $PortalColorScale "1.4"
+    }
+    $time "0.0"
+    Proxies
+    {
+        CurrentTime
+        {
+            resultVar $time
+        }
+        PortalOpenAmount
+        {
+            resultVar $PortalOpenAmount
+        }
+        PortalStatic
+        {
+            resultVar $PortalStatic
+        }
+    }
+}
