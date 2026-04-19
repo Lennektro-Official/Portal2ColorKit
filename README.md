@@ -18,7 +18,7 @@ breaking the crosshair in coop or for mono portal guns. Although it is unlikely,
 5. Open the *options.ini* and change the **DlcFolder** property to the number of the dlc folder you want to use for the color kit
 
 # Hot to use
-Now you can just change the color values in the *options.ini* to your heart's content. Then you just have to run the *appply* file on Linux or the *apply.bat* on Windows respectively, while making sure your game is closed.
+Now you can just change the color values in the *options.ini* to your heart's content. Then you just have to run the *apply* file on Linux or the *apply.bat* on Windows respectively, while making sure your game is closed.
 > NOTE: You have to reapply every time you change your settings or the game updates
 
 <br>
