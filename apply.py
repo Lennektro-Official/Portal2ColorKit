@@ -315,7 +315,7 @@ def processLib(lib, patches, os_priority):
         offsets = readOffsetsFile(lib_name, 'colors')
         if offsets is None:
             print(f"!!! No valid offsets file present for {lib_name}!")
-            m.close()
+            mm.close()
             return
         print(f"Patching colors in {lib_name}...")
         for i, offset in enumerate(offsets):
