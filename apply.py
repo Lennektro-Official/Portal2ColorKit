@@ -100,14 +100,17 @@ if not os.path.exists(DLC_FOLDER):
 
 VPK_CREATE_DIR: Final = SCRIPT_DIR + "pak01_dir/"
 VPK_PORTALS_DIR: Final = VPK_CREATE_DIR + "materials/models/portals/"
+VPK_PORTAL_EMITTER_DIR: Final = VPK_CREATE_DIR + "materials/models/props/"
 
 REF_DIR: Final = SCRIPT_DIR + "ref/"
 
-DUMMY_REF: Final = REF_DIR + "dummy-ref.png"
-COLOR_REF: Final = REF_DIR + "portal-ref-color.png"
-COLOR_DX8_REF: Final = REF_DIR + "portal-ref-color-dx8.png"
+DUMMY_REF: Final = REF_DIR + "ghosting.png"
+COLOR_REF: Final = REF_DIR + "portal-color.png"
+COLOR_DX8_REF: Final = REF_DIR + "portal-color-dx8.png"
 
-COOP_REF: Final = REF_DIR + "portalstaticoverlay_tinted.vmt"
+PORTAL_EMITTER_REF: Final = REF_DIR + "portal-emitter.png"
+
+COOP_REF: Final = REF_DIR + "coop.txt"
 
 PORTAL2_BIN: Final = _parentDirs(SCRIPT_DIR, 1) + "/portal2/bin/"
 
@@ -182,15 +185,11 @@ def createVpk(folder, target):
     the_vpk.write_dirfile()
     
 def generateTextures(color_name, color):
-    files = [
+    files = (
         VPK_PORTALS_DIR + "dummy-" + color_name + ".vtf",
         VPK_PORTALS_DIR + "portal-" + color_name + "-color.vtf",
         VPK_PORTALS_DIR + "portal-" + color_name + "-color-dx8.vtf"
-    ]
-    if color is None:
-        for f in files: 
-            if os.path.exists(f): os.remove(f)
-        return
+    )
     createVtf(colorizeImage(Image.open(DUMMY_REF), color), files[0], True)
     createVtf(colorizeImage(Image.open(COLOR_REF), color), files[1], False)
     createVtf(colorizeImage(Image.open(COLOR_DX8_REF), color), files[2], True)
@@ -212,6 +211,10 @@ def generateCoopFile():
         modified_lines.append(line)
     with open(VPK_PORTALS_DIR + "portalstaticoverlay_tinted.vmt", 'w') as f:
         f.writelines(modified_lines)
+
+def generateEmitterTexture(file, color):
+    if color is None: return
+    createVtf(colorizeImage(Image.open(PORTAL_EMITTER_REF), color), VPK_PORTAL_EMITTER_DIR + file, True)
     
 def createTheVpk():
     with os.scandir(DLC_FOLDER) as d: 
@@ -221,6 +224,13 @@ def createTheVpk():
     generateTextures("blue", options.PRIMARY_COLOR)
     generateTextures("orange", options.SECONDARY_COLOR)
     generateCoopFile()
+    os.makedirs(VPK_PORTAL_EMITTER_DIR, exist_ok=True)
+    generateEmitterTexture("portal_emitter_lights_on_blue.vtf", options.PRIMARY_COLOR)
+    generateEmitterTexture("portal_emitter_lights_on_orange.vtf", options.SECONDARY_COLOR)
+    generateEmitterTexture("portal_emitter_lights_on_light_blue.vtf", options.atlas.PRIMARY)
+    generateEmitterTexture("portal_emitter_lights_on_purple.vtf", options.atlas.SECONDARY)
+    generateEmitterTexture("portal_emitter_lights_on_yellow.vtf", options.pbody.PRIMARY)
+    generateEmitterTexture("portal_emitter_lights_on_red.vtf", options.pbody.SECONDARY)
     createVpk(VPK_CREATE_DIR, DLC_FOLDER + "pak01_dir.vpk")
     shutil.rmtree(VPK_CREATE_DIR)
     
