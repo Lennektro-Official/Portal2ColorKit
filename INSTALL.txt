@@ -1,0 +1,7 @@
+1. Ensure you have python 3.10 or newer installed on your system
+2. Put the color_kit folder into your "Portal 2" folder (not "portal2"!)
+3. Create a new dlc folder that you want to use for the color kit (for example "portal2_dlc5") and ensure you have no other vpks in it
+4. Edit the options.ini to your liking and adjust the dlc folder number accordingly
+5. Then just run the apply file on linux or apply.bat on windows
+
+NOTE: Every time you change your settings or the game updates you have to reapply

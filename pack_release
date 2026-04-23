@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# definitions
+ARCHIVE_NAME="Portal.2.Color.Kit.v$1.zip"
+
+SUB_DIR="color_kit"
+
+DEFAULT_OPTIONS="default_options.ini"
+ACTUAL_OPTIONS="options.ini"
+
+FILES=("apply.py" "apply" "apply.bat" "ref" "requirements.txt" "$DEFAULT_OPTIONS")
+
+INSTRUCTION_FILES=("INSTALL.txt")
+
+TEMP="temp"
+
+# create temp dir
+mkdir -p "$TEMP/$SUB_DIR"
+
+# copy files to sub dir
+for ITEM in "${FILES[@]}"; do
+    [ -e "$ITEM" ] && cp -a "$ITEM" "$TEMP/$SUB_DIR/"
+done
+
+# copy instruction files to root
+for ITEM in "${INSTRUCTION_FILES[@]}"; do
+    [ -e "$ITEM" ] && cp -a "$ITEM" "$TEMP/"
+done
+
+# rename options file
+[ -e "$TEMP/$SUB_DIR/$DEFAULT_OPTIONS" ] && mv "$TEMP/$SUB_DIR/$DEFAULT_OPTIONS" "$TEMP/$SUB_DIR/$ACTUAL_OPTIONS"
+
+# create zip archive
+(cd "$TEMP" && zip -rq "../$ARCHIVE_NAME" .)
+
+# delete temp dir
+rm -rf "$TEMP"
+
