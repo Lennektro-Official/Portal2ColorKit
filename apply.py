@@ -1,6 +1,6 @@
 ############################
 # Portal 2 Color Kit       #
-#   by Lennektro v1.1 2026 #
+#   by Lennektro v1.2 2026 #
 ############################
 
 import os
