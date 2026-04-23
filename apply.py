@@ -193,6 +193,7 @@ def createVtf(img, path, alpha):
 
 # create a colorized texture from a grayscale reference
 def createCTexture(ref_path, color, path, alpha):
+    if color is None: return # if no color is set we don't want to overwrite anything
     createVtf(colorizeImageToBGRA(Image.open(ref_path), color), path, alpha)
 
 # create a vpk from a folder
@@ -228,7 +229,6 @@ def generateCoopFile():
 
 # generate the emitter texture for a portal_emitter/autoportal frame
 def generateEmitterTexture(file, color):
-    if color is None: return
     createCTexture(PORTAL_EMITTER_REF, color, VPK_PORTAL_EMITTER_DIR + file, True)
 
 # compile all necessary textures and material defintions and pack them into a vpk in our dlc folder
