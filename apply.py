@@ -242,14 +242,10 @@ def createTheVpk():
     generatePortalTextures("blue", options.sp.PRIMARY)
     generatePortalTextures("orange", options.sp.SECONDARY)
     generateCoopFile()
-    # create all portal_emitter/autoportal frame textures (the ones for coop don't exist in base line portal 2, they are a bee mod thing)
+    # create portal_emitter/autoportal frame textures
     os.makedirs(VPK_PORTAL_EMITTER_DIR, exist_ok=True)
     generateEmitterTexture("portal_emitter_lights_on_blue.vtf", options.sp.PRIMARY)
     generateEmitterTexture("portal_emitter_lights_on_orange.vtf", options.sp.SECONDARY)
-    generateEmitterTexture("portal_emitter_lights_on_light_blue.vtf", options.atlas.PRIMARY)
-    generateEmitterTexture("portal_emitter_lights_on_purple.vtf", options.atlas.SECONDARY)
-    generateEmitterTexture("portal_emitter_lights_on_yellow.vtf", options.pbody.PRIMARY)
-    generateEmitterTexture("portal_emitter_lights_on_red.vtf", options.pbody.SECONDARY)
     # build the actual vpk
     createVpk(VPK_CREATE_DIR, DLC_FOLDER + "pak01_dir.vpk")
     # delete the temp dir that we used to assemble the vpk
