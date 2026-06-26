@@ -20,8 +20,7 @@ import mmap
 import re
 
 
-# >>> helper methods <<<
-########################
+# >>> helper methods <<< ########################
 
 # path helpers
 def _ensureEndswith(string, token):
@@ -97,12 +96,46 @@ if options.DLC_FOLDER is None:
     exit(-2)
 
 # figure out dlc folder path
-DLC_FOLDER: Final = _parentDirs(SCRIPT_DIR, 1) + "/portal2_dlc" + str(options.DLC_FOLDER) + "/"
+GAME_DIR: Final = _parentDirs(SCRIPT_DIR, 1) + "/"
+DLC_FOLDER: Final = GAME_DIR + "portal2_dlc" + str(options.DLC_FOLDER) + "/"
 
 # ensure that dlc folder exists
 if not os.path.exists(DLC_FOLDER):
     print("Error: Specified dlc folder does not seem to exist, exiting...")
     exit(-3)
+
+# logic to fix the soundcache
+def getDlcFolder(id):
+    return "{game_path}portal2_dlc{id}/".format(game_path=GAME_DIR, id=id)
+
+def getHighestDlcFolderId():
+    id = -1
+    with os.scandir(GAME_DIR) as sdir:
+        for subfolder in sdir:
+            if not subfolder.is_dir(): continue
+            name = subfolder.name
+            if not "portal2_dlc" in name: continue
+            if len(name.split('_')) != 2: continue
+            cidstr = name[-1]
+            if not cidstr.isdigit(): continue
+            cid = int(cidstr)
+            if cid > id: id = cid
+    return id
+
+def fixSoundcache():
+    cache_subpath: Final = "maps/soundcache/_master.cache"
+    source_path = None
+    target_path = getDlcFolder(getHighestDlcFolderId()) + cache_subpath
+    if os.path.isfile(target_path): return
+    for i in range(getHighestDlcFolderId() - 1, 1, -1):
+        cpath = getDlcFolder(i) + cache_subpath
+        if os.path.isfile(cpath):
+            source_path = cpath
+            break
+    if source_path is None: return
+    target_dirs = _parentDirs(target_path, 1)
+    if not os.path.exists(target_dirs): os.makedirs(target_dirs)
+    shutil.copy(source_path, target_path)
 
 # figure out all other relevant paths
 VPK_CREATE_DIR: Final = SCRIPT_DIR + "pak01_dir/"
@@ -389,9 +422,13 @@ def patchClient():
 
 # actual script entry
 def apply():
-    print(f"Using dlc folder {options.DLC_FOLDER}")
+    print(f"== Using dlc folder {options.DLC_FOLDER}")
+    print("Fixing Soundcache...")
+    fixSoundcache()
 
-    print(f"Applying sp colors for values PRIMARY: {strlzColor(options.sp.PRIMARY)} and SECONDARY: {strlzColor(options.sp.SECONDARY)}")
+    print("Applying sp colors for values:")
+    print(f" > Primary: {strlzColor(options.sp.PRIMARY)}")
+    print(f" > Secondary: {strlzColor(options.sp.SECONDARY)}")
 
     print("Applying coop colors for values:")
     print(f" > Atlas Primary: {strlzColor(options.atlas.PRIMARY)}")
