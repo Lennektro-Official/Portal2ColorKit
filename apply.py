@@ -1,6 +1,6 @@
 ############################
 # Portal 2 Color Kit       #
-#   by Lennektro v1.2 2026 #
+#   by Lennektro v1.3 2026 #
 ############################
 
 import os
@@ -20,7 +20,8 @@ import mmap
 import re
 
 
-# >>> helper methods <<< ########################
+# >>> helper methods <<<
+########################
 
 # path helpers
 def _ensureEndswith(string, token):
